@@ -26,16 +26,26 @@ class BitmexOrderbookLoader(Callback):
             try:
                 # data retrieving
                 order_book = self.bitmex_api.fetch_order_book(self.pair, limit=self.buckets)
-
-                total_book   = {
-                    **self._formatOrderBook(order_book["bids"]),
-                    **self._formatOrderBook(order_book["asks"])
-                }
-
                 timestamp = datetime.utcnow().isoformat()
                 messages = []
-                for k, v in total_book.items():
-                    messages += [{ "timestamp": timestamp, "pair": self.pair, "price": k, "amount": v }]
+
+                #formatting
+                for k, v in self._formatOrderBook(order_book["bids"]).items():
+                    messages += [{
+                        "timestamp": timestamp,
+                        "deal": "long",
+                        "pair": self.pair,
+                        "price": k,
+                        "amount": v
+                    }]
+                for k, v in self._formatOrderBook(order_book["asks"]).items():
+                    messages += [{
+                        "timestamp": timestamp,
+                        "deal": "short",
+                        "pair": self.pair,
+                        "price": k,
+                        "amount": v
+                    }]
 
                 self.logger.info("got %s buckets, going for sleep for %s sec" % (len(messages), self.sleep_time))
                 await self.sendCallback(messages)

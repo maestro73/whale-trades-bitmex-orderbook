@@ -22,10 +22,11 @@ try:
 
     loader = BitmexOrderbookLoader(SETTINGS["wtbo_pair"], sleep_time=SETTINGS["wtbo_sleep_ms"], buckets=SETTINGS["wtbo_buckets"], bucket_size=SETTINGS["wtbo_bucket_size"])
 
-    kafka = KafkaCallback(SETTINGS["wtbo_kafka_url"], type_topic_mapping=topic_mapping)
-    #print_c = PrintCallback()
+    #kafka = KafkaCallback(SETTINGS["wtbo_kafka_url"], type_topic_mapping=topic_mapping)
+    print_c = PrintCallback()
 
-    loader.addCallback(kafka)
+    loader.addCallback(print_c)
+    #loader.addCallback(kafka)
 
     if __name__ == "__main__":
         loop = asyncio.get_event_loop()
