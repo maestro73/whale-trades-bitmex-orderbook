@@ -5,20 +5,22 @@ from datetime import datetime
 
 class BitmexOrderbookLoader(Callback):
 
-    bitmex_api  = None
-    logger      = None
-    sleep_time  = None
-    buckets     = None
-    bucket_size = None
-    pair        = None
+    bitmex_api   = None
+    logger       = None
+    sleep_time   = None
+    buckets      = None
+    bucket_size  = None
+    pair         = None
+    message_type = None
 
-    def __init__(self, pair, sleep_time=300000, buckets=0, bucket_size=1):
+    def __init__(self, pair, sleep_time=300000, buckets=0, bucket_size=1, message_type="bitmex_orderbook"):
         super().__init__("BitmexOrderbookLoader")
-        self.sleep_time  = int(sleep_time)/1000
-        self.bitmex_api  = ccxt.bitmex()
-        self.buckets     = int(buckets)
-        self.bucket_size = float(bucket_size)
-        self.pair        = pair
+        self.sleep_time   = int(sleep_time)/1000
+        self.bitmex_api   = ccxt.bitmex()
+        self.buckets      = int(buckets)
+        self.bucket_size  = float(bucket_size)
+        self.pair         = pair
+        self.message_type = message_type
 
     async def run(self):
         while True:
@@ -46,6 +48,9 @@ class BitmexOrderbookLoader(Callback):
                         "price": k,
                         "amount": v
                     }]
+
+                for msg in messages:
+                    msg["type"] = self.message_type
 
                 self.logger.info("got %s buckets, going for sleep for %s sec" % (len(messages), self.sleep_time))
                 await self.sendCallback(messages)

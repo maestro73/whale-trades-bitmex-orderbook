@@ -20,7 +20,12 @@ try:
         SETTINGS["wtbo_marketcap_bitmex_orderbook_type"] : SETTINGS["wtbo_marketcap_bitmex_orderbook_topic"],
     }
 
-    loader = BitmexOrderbookLoader(SETTINGS["wtbo_pair"], sleep_time=SETTINGS["wtbo_sleep_ms"], buckets=SETTINGS["wtbo_buckets"], bucket_size=SETTINGS["wtbo_bucket_size"])
+    loader = BitmexOrderbookLoader(SETTINGS["wtbo_pair"],
+        sleep_time=SETTINGS["wtbo_sleep_ms"],
+        buckets=SETTINGS["wtbo_buckets"],
+        bucket_size=SETTINGS["wtbo_bucket_size"],
+        message_type=SETTINGS["wtbo_marketcap_bitmex_orderbook_type"],
+    )
 
     kafka = KafkaCallback(SETTINGS["wtbo_kafka_url"], type_topic_mapping=topic_mapping)
     #print_c = PrintCallback()
