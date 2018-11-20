@@ -27,5 +27,4 @@ COPY        --from=builder /install /usr/local
 ENV         PATH=.:$PATH
 
 ENTRYPOINT  ["docker-entrypoint.sh"]
-
-CMD ["run"]
+CMD         ["run"]
