@@ -13,8 +13,8 @@ class KafkaCallback(Callback):
     default_topic_name  = None
     default_retries     = None
 
-    def __init__(self, kafka_url, logger=None, type_topic_mapping=[], default_topic_name="other", default_retries=3):
-        super().__init__("KafkaCallback", logger=logger)
+    def __init__(self, kafka_url, type_topic_mapping=[], default_topic_name="other", default_retries=3):
+        super().__init__("KafkaCallback")
 
         self.kafka_url          = kafka_url
         self.type_topic_mapping = type_topic_mapping
@@ -24,11 +24,15 @@ class KafkaCallback(Callback):
         self.init()
 
     def init(self):
-        self.producer = KafkaProducer(
-            bootstrap_servers=[self.kafka_url],
-            value_serializer=lambda m: json.dumps(m).encode('ascii'),
-            retries=3
-        )
+        try:
+            self.producer = KafkaProducer(
+                bootstrap_servers=[self.kafka_url],
+                value_serializer=lambda m: json.dumps(m).encode('ascii'),
+                retries=3
+            )
+        except Exception as e:
+            self.logger.exception("Caught exception during KafkaCallback.init!")
+            raise e
 
     async def processCallback(self, obj):
         #NOTE: awesome sh*t is going on here
@@ -37,6 +41,7 @@ class KafkaCallback(Callback):
         if type(obj) is list:
             for o in obj:
                 await self.processCallback(o)
+            self.producer.flush()
             return
 
         selected_topic = self.default_topic_name

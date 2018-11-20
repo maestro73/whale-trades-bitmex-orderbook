@@ -1,10 +1,10 @@
 import argparse
 import os
-from .log import LOGGER
+from log import LOGGER
 import sys
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--wtbo_kafka_url",              t         type=str, default=None)
+parser.add_argument("--wtbo_kafka_url",                        type=str, default=None)
 parser.add_argument("--wtbo_marketcap_bitmex_orderbook_topic", type=str, default="bitmex_orderbook")
 parser.add_argument("--wtbo_marketcap_bitmex_orderbook_type",  type=str, default="bitmex_orderbook")
 parser.add_argument("--wtbo_pair",                             type=str, default="BTC/USD")

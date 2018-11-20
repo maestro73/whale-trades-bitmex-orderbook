@@ -12,8 +12,8 @@ class BitmexOrderbookLoader(Callback):
     bucket_size = None
     pair        = None
 
-    def __init__(self, pair, logger=None, sleep_time=300000, buckets=0, bucket_size=1):
-        super().__init__("BitmexOrderbookLoader", logger=logger)
+    def __init__(self, pair, sleep_time=300000, buckets=0, bucket_size=1):
+        super().__init__("BitmexOrderbookLoader")
         self.sleep_time  = int(sleep_time)/1000
         self.bitmex_api  = ccxt.bitmex()
         self.buckets     = buckets
@@ -25,17 +25,17 @@ class BitmexOrderbookLoader(Callback):
 
             try:
                 # data retrieving
-                order_book = bitmex_api.fetch_order_book(self.pair, limit=self.buckets)
+                order_book = self.bitmex_api.fetch_order_book(self.pair, limit=self.buckets)
 
                 total_book   = {
-                    **formatOrderBook(order_book["bids"]),
-                    **formatOrderBook(order_book["asks"])
+                    **self._formatOrderBook(order_book["bids"]),
+                    **self._formatOrderBook(order_book["asks"])
                 }
 
                 timestamp = datetime.utcnow().isoformat()
                 messages = []
                 for k, v in total_book.items():
-                    messages += [{ "timestamp": timestamp, "pair": PAIR, "price": k, "amount": v }]
+                    messages += [{ "timestamp": timestamp, "pair": self.pair, "price": k, "amount": v }]
 
                 self.logger.info("got %s buckets, going for sleep for %s sec" % (len(messages), self.sleep_time))
                 await self.sendCallback(messages)
@@ -45,7 +45,7 @@ class BitmexOrderbookLoader(Callback):
 
             await asyncio.sleep(self.sleep_time)
 
-    def _formatOrderBook(bitmex_order_book):
+    def _formatOrderBook(self, bitmex_order_book):
         if type(bitmex_order_book) != list:
             raise Exception("bitmex_order_book should be list!")
 

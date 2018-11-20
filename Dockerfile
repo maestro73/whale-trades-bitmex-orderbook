@@ -1,21 +1,28 @@
-FROM        python:3.7-alpine
+### BASE IMAGE ###
+FROM        python:3.7-alpine as base
+FROM        base              as builder
+
+RUN         mkdir /install
+WORKDIR     /install
+
+COPY        requirements_base.txt /requirements.txt
+RUN         set -ex ;\
+            apk add gcc musl-dev ;\
+            pip install --no-cache-dir --install-option="--prefix=/install" -r /requirements.txt
+
+### IMAGE ###
+FROM        base
+
 ARG         APP_DIR=/app/
 ARG         SRC_DIR=src
-ARG         USER_NAME=wtbo
-
 WORKDIR     ${APP_DIR}
 
-COPY        ${SRC_DIR}/requirements_base.txt    ${APP_DIR}
-COPY        docker-entrypoint.sh                ${APP_DIR}
+COPY        docker-entrypoint.sh  ${APP_DIR}docker-entrypoint.sh
+RUN         apk add bash ;\
+            chmod +x docker-entrypoint.sh
 
-RUN         set -ex ;\
-            apk add bash gcc musl-dev ;\
-            pip install --no-cache-dir -r requirements_base.txt ;\
-            chmod +x docker-entrypoint.sh ;\
-            rm -rf /var/lib/apt/lists/* ;\
-            rm -rf /var/cache/apk/*
-
-COPY        ${SRC_DIR}                          ${APP_DIR}/${SRC_DIR}
+COPY        ${SRC_DIR}  ${APP_DIR}
+COPY        --from=builder /install /usr/local
 
 ENV         PATH=.:$PATH
 

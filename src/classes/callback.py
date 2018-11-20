@@ -1,6 +1,6 @@
 import asyncio
 import functools
-from .dummy_logger import DummyLogger
+import logging
 
 class Callback(object):
 
@@ -10,12 +10,12 @@ class Callback(object):
     eventLoop       = None
     logger          = None
 
-    def __init__(self, name="", objectType=None, logger=None):
+    def __init__(self, name="", objectType=None):
         self.callbackList   = []
         self.name           = name
         self.objectType     = objectType
         self.eventLoop      = asyncio.get_event_loop()
-        self.logger         = logger if logger != None else DummyLogger()
+        self.logger         = logging.getLogger()
 
     def addCallback(self, *anotherCallbacks):
         for anotherCallback in anotherCallbacks:

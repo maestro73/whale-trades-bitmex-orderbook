@@ -2,3 +2,5 @@ asyncio
 kafka-python
 ccxt
 websockets
+json_log_formatter
+ujson
