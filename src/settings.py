@@ -4,13 +4,13 @@ from .log import LOGGER
 import sys
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--wtcke_kafka_url",              type=str, default=None)
-parser.add_argument("--wtcke_marketcap_global_topic", type=str, default="marketcap_global")
-parser.add_argument("--wtcke_marketcap_global_type",  type=str, default="global")
-parser.add_argument("--wtcke_coin_marketcap_topic",   type=str, default="coin_marketcap")
-parser.add_argument("--wtcke_coin_marketcap_type",    type=str, default="coin_marketcap")
-parser.add_argument("--wtcke_sleep_ms",               type=int, default=300000)
-parser.add_argument("--wtcke_coin_max_rank",          type=int, default=30)
+parser.add_argument("--wtbo_kafka_url",              t         type=str, default=None)
+parser.add_argument("--wtbo_marketcap_bitmex_orderbook_topic", type=str, default="bitmex_orderbook")
+parser.add_argument("--wtbo_marketcap_bitmex_orderbook_type",  type=str, default="bitmex_orderbook")
+parser.add_argument("--wtbo_pair",                             type=str, default="BTC/USD")
+parser.add_argument("--wtbo_buckets",                          type=int, default=0)
+parser.add_argument("--wtbo_bucket_size",                      type=int, default=5)
+parser.add_argument("--wtbo_sleep_ms",                         type=int, default=300000)
 
 args = parser.parse_args()
 

@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  wtcke:
+  wtbo:
     image: ${DOCKER_ID_USER}/${APP_NAME}:${APP_VERSION}
     build:
       context: .

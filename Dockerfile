@@ -1,7 +1,7 @@
 FROM        python:3.7-alpine
 ARG         APP_DIR=/app/
 ARG         SRC_DIR=src
-ARG         USER_NAME=wtcke
+ARG         USER_NAME=wtbo
 
 WORKDIR     ${APP_DIR}
 

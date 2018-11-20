@@ -34,6 +34,10 @@ class KafkaCallback(Callback):
         #NOTE: awesome sh*t is going on here
         if type(obj) is str:
             obj = json.loads(obj)
+        if type(obj) is list:
+            for o in obj:
+                await self.processCallback(o)
+            return
 
         selected_topic = self.default_topic_name
         message_type = obj.get("type", None)

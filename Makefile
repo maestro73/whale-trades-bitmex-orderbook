@@ -1,6 +1,6 @@
 .EXPORT_ALL_VARIABLES:
 APP_VERSION			= $(shell git describe --abbrev=0 --tags)
-APP_NAME				= wtcke
+APP_NAME				= wtbo
 DOCKER_ID_USER	= dmi7ry
 
 all: build
