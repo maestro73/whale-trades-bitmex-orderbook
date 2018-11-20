@@ -16,8 +16,8 @@ class BitmexOrderbookLoader(Callback):
         super().__init__("BitmexOrderbookLoader")
         self.sleep_time  = int(sleep_time)/1000
         self.bitmex_api  = ccxt.bitmex()
-        self.buckets     = buckets
-        self.bucket_size = bucket_size
+        self.buckets     = int(buckets)
+        self.bucket_size = float(bucket_size)
         self.pair        = pair
 
     async def run(self):
