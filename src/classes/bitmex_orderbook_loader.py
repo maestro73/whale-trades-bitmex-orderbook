@@ -48,7 +48,7 @@ class BitmexOrderbookLoader(Callback):
                         "pair": self.pair,
                         "price": k,
                         "amount": v,
-                        "short": -v
+                        "short": v
                     }]
 
                 for msg in messages:
