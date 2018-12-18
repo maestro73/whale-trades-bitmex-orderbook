@@ -28,7 +28,7 @@ class BitmexOrderbookLoader(Callback):
             try:
                 # data retrieving
                 order_book = self.bitmex_api.fetch_order_book(self.pair, limit=self.buckets)
-                timestamp = datetime.utcnow().isoformat()
+                timestamp = datetime.utcnow().timestamp()
                 messages = []
 
                 #formatting
@@ -38,7 +38,8 @@ class BitmexOrderbookLoader(Callback):
                         "deal": "long",
                         "pair": self.pair,
                         "price": k,
-                        "amount": v
+                        "amount": v,
+                        "long": v
                     }]
                 for k, v in self._formatOrderBook(order_book["asks"]).items():
                     messages += [{
@@ -46,7 +47,8 @@ class BitmexOrderbookLoader(Callback):
                         "deal": "short",
                         "pair": self.pair,
                         "price": k,
-                        "amount": v
+                        "amount": v,
+                        "short": -v
                     }]
 
                 for msg in messages:
