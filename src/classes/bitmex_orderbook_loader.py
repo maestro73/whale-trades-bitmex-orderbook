@@ -39,7 +39,8 @@ class BitmexOrderbookLoader(Callback):
                         "pair": self.pair,
                         "price": k,
                         "amount": v,
-                        "long": v
+                        "long": v,
+                        "short": 0
                     }]
                 for k, v in self._formatOrderBook(order_book["asks"]).items():
                     messages += [{
@@ -48,7 +49,8 @@ class BitmexOrderbookLoader(Callback):
                         "pair": self.pair,
                         "price": k,
                         "amount": v,
-                        "short": v
+                        "short": v,
+                        "long": 0
                     }]
 
                 for msg in messages:
